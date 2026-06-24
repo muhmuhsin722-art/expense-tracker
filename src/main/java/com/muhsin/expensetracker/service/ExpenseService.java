@@ -1,9 +1,16 @@
 package com.muhsin.expensetracker.service;
 
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import java.time.LocalDate;
 import java.util.List;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.muhsin.expensetracker.entity.Expense;
 import com.muhsin.expensetracker.exception.ResourceNotFoundException;
@@ -53,5 +60,28 @@ public class ExpenseService {
         }
 
         return null;
+    }
+    public List<Expense> getExpensesByCategory(String category) {
+        return expenseRepository.findByCategory(category);
+    }
+    
+
+    public List<Expense> getExpensesByDate(LocalDate expenseDate){
+		return expenseRepository.findByExpensedate(expenseDate);
+    	
+    }
+    
+    public Double getTotelExpeses() {
+    	Double totel=expenseRepository.getTotelExpenses();
+    	return totel != null ? totel : 0.0;
+    }
+    
+    public Page<Expense> getAllExpenses(Pageable pageable) {
+        return expenseRepository.findAll(pageable);
+    }
+    
+    public List<Expense> getExpenseBetweenDates(LocalDate startDate, LocalDate endDate){
+    	return expenseRepository.findByExpensedateBetween(startDate ,endDate);
+    	
     }
 }
