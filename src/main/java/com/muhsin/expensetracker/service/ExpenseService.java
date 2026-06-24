@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.muhsin.expensetracker.entity.Expense;
+import com.muhsin.expensetracker.exception.ResourceNotFoundException;
 import com.muhsin.expensetracker.repository.ExpenseRepository;
 
 @Service
@@ -24,8 +25,11 @@ public class ExpenseService {
 
     public Expense getExpenseById(Long id) {
         return expenseRepository.findById(id)
-                .orElse(null);
-    }
+        		.orElseThrow(() ->
+                new ResourceNotFoundException(
+                    "Expense not found with id: " + id));
+}
+    
 
     public void deleteExpense(Long id) {
         expenseRepository.deleteById(id);
@@ -35,7 +39,8 @@ public class ExpenseService {
 
         Expense existingExpense =
                 expenseRepository.findById(id)
-                        .orElse(null);
+                        .orElseThrow(()-> new ResourceNotFoundException(
+                        		"Expense not found with id:" + id));
 
         if (existingExpense != null) {
 

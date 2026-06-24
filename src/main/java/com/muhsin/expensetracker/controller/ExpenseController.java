@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.muhsin.expensetracker.entity.Expense;
+import com.muhsin.expensetracker.exception.ResourceNotFoundException;
 import com.muhsin.expensetracker.service.ExpenseService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("api/expenses")
@@ -23,7 +26,7 @@ public class ExpenseController {
 	private ExpenseService expenseService;
 	
 	@PostMapping
-	public Expense saveExpense(@RequestBody Expense expense) {
+	public Expense saveExpense(@Valid @RequestBody Expense expense) {
 		
 		   System.out.println(expense.getName());
 		    System.out.println(expense.getAmount());
@@ -46,7 +49,7 @@ public class ExpenseController {
 	 @PutMapping("/{id}")
 	 public Expense updateExpense(
 			 @PathVariable   Long id,
-			  @RequestBody   Expense expense) {
+			 @Valid@RequestBody   Expense expense) {
 		 return expenseService.updateExpense(id, expense);
 	 }
 	 
@@ -54,7 +57,10 @@ public class ExpenseController {
 	 public void deleteExpense(@PathVariable Long id) {
 	     expenseService.deleteExpense(id);
 	 }
-	 
+	 @GetMapping("/test")
+	 public String test() {
+	     throw new ResourceNotFoundException("Test exception");
+	 }
 	 
 }
 
